@@ -1,11 +1,18 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
+#include "Model/backupxmlparser.h"
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+
+    BackupXMLParser a("C:\\Users\\l3enQ\\Downloads\\sms-20210506000715.xml");
+    qDebug() << a.Parse();
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/View/main.qml"));
