@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>View/main.qml</file>
+        <file>View/SMSLoader.qml</file>
+    </qresource>
+</RCC>
