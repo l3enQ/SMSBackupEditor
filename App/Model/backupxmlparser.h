@@ -3,19 +3,24 @@
 
 #include <QObject>
 #include <QDomDocument>
+#include <QMap>
 
-class BackupXMLParser
+class BackupXMLParser : public QObject
 {
+    Q_OBJECT
+
 public:
     BackupXMLParser(const QString &filePath);
-
     bool Parse();
 
-    void write(QList<QMap<QString, QString>> smses);
+public slots:
+    bool ParseFile(QString filePath);
 
 private:
     QString _filePath;
     QDomDocument domDocument;
+
+    void write(QList<QMap<QString, QString>> smses);
 };
 
 #endif // BACKUPXMLPARSER_H

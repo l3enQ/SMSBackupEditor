@@ -3,5 +3,6 @@
         <file>View/main.qml</file>
         <file>View/SMSLoader.qml</file>
         <file>View/SMSViewer.qml</file>
+        <file>View/TreeView.qml</file>
     </qresource>
 </RCC>

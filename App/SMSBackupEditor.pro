@@ -1,4 +1,4 @@
-QT += quick xml widgets gui
+QT += quick qml quickcontrols2 xml core
 
 CONFIG += c++11
 
@@ -14,13 +14,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Model/smscontactsmodel.cpp \
+    Model/xmlreader.cpp \
         main.cpp \
     Model/backupxmlparser.cpp
 
 HEADERS += \
-    Model/backupxmlparser.h
+    Model/backupxmlparser.h \
+    Model/smscontactsmodel.h \
+    Model/xmlreader.h
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    fontello.ttf
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

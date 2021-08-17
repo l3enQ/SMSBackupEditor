@@ -1,8 +1,10 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.14
+import QtQuick.Controls 2.5
+import QtQuick.Controls.Universal 2.14
 
-Window {
+ApplicationWindow {
     id: window
     visible: true
     width: 640
@@ -10,6 +12,8 @@ Window {
     title: qsTr("SMS Backup Editor")
     minimumWidth:  320;
     minimumHeight: 320;
+    Universal.theme: Universal.Light
+    Universal.accent: Universal.Pink
 
     SplitView{
         id : splitView

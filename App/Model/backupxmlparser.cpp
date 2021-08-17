@@ -1,44 +1,47 @@
 #include "backupxmlparser.h"
 #include <QDomDocument>
 #include <QtDebug>
-#include <QMessageBox>
 #include <QFile>
 #include <QDateTime>
+#include <QThread>
 
 BackupXMLParser::BackupXMLParser(const QString &filePath)
 {
     _filePath = filePath;
+
+    static QThread thread;
+    thread.start();
+    moveToThread(&thread);
 }
 
 bool BackupXMLParser::Parse()
+{
+    ParseFile(_filePath);
+}
+
+bool BackupXMLParser::ParseFile(QString filePath)
 {
     QString errorStr;
     int errorLine;
     int errorColumn;
 
     //load the file
-    QFile xmlFile(_filePath);
+    QFile xmlFile(filePath);
     if (!xmlFile.exists() || !xmlFile.open(QFile::ReadOnly)) {
         qDebug() << "Check your *.xml file";
         return false;
     }
 
-
-//    domDocument = QDomDocument(_filePath);
-
     if (!domDocument.setContent(&xmlFile, true, &errorStr, &errorLine,
                                 &errorColumn)) {
-        QMessageBox::information(nullptr, "DOM",
-                                 QString("Parse error at line %1, column %2:\n%3")
-                                 .arg(errorLine)
-                                 .arg(errorColumn)
-                                 .arg(errorStr));
+        qDebug() << QString("Parse error at line %1, column %2:\n%3")
+                    .arg(errorLine)
+                    .arg(errorColumn)
+                    .arg(errorStr);
         return false;
     }
 
     QDomElement root = domDocument.documentElement();
-    qDebug() << root.tagName();// << root.attributes() << root.childNodes();
-    qDebug() << root.attribute("count") << root.childNodes().size() << root.attributes().size();
 
     QStringList attributes = {
         "protocol",
@@ -59,8 +62,6 @@ bool BackupXMLParser::Parse()
         "body"
     };
 
-    QLocale us(QLocale::English);
-
     QList<QMap<QString, QString>> smses;
     QMultiMap<QString, QMap<QString, QString>> smsesMap;
     for (int var = 0; var < root.childNodes().size(); ++var) {
@@ -72,25 +73,13 @@ bool BackupXMLParser::Parse()
 
         smses.append(attribVals);
         smsesMap.insertMulti(attribVals.value("address"), attribVals);
-
-//        qDebug() << nodeElement.attribute("readable_date")
-//                 << us.toString(QDateTime::fromMSecsSinceEpoch(nodeElement.attribute("date").toLongLong()), "MMM d, yyyy h:mm:ss A")
-//                 << nodeElement.attribute("date_sent").toLongLong();
     }
 
 
     qDebug() << smses.size() << smsesMap.size() << smsesMap.uniqueKeys().size()
-             << smsesMap.values(smsesMap.keys().at(110).size();
+             << smsesMap.values(smsesMap.uniqueKeys().at(110)).count();
     qDebug() << smsesMap.uniqueKeys().at(110) << smsesMap.values(smsesMap.uniqueKeys().at(110));
 
-//    clear();
-
-
-//    QDomElement child = root.firstChildElement();
-//    while (!child.isNull()) {
-//        parseFolderElement(child);
-//        child = child.nextSiblingElement(folderElement());
-//    }
     write(smses);
     return true;
 }

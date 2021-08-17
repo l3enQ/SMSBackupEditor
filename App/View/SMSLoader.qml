@@ -1,21 +1,19 @@
 import QtQuick 2.0
 //import QtQuick 2.3
 
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 
 Item {
+    clip: true
     onWidthChanged: {
-        console.log(width)
+        width = width > 150 ? width : 0;
     }
-
-    width: width > 150 ? width : 0
 
     //! [filedialog]
     FileDialog {
         id: fileDialog
-//        visible: browseBtn.pressed
         modality: Qt.WindowModal;
         title: "Choose some files";
         selectExisting: true;
@@ -25,8 +23,14 @@ Item {
         selectedNameFilter: "All files (*)"
         sidebarVisible: true
         onAccepted: {
-            console.log("Accepted: " + fileUrls[0])
-            pathField.text = fileUrls[0];
+            var path = fileDialog.fileUrl.toString();
+            path = path.replace(/^(file:\/{3})/,"");
+            // unescape html codes like '%23' for '#'
+            var cleanPath = decodeURIComponent(path);
+            console.log("Accepted: " + cleanPath)
+
+            pathField.text = cleanPath;
+            xmlReader.setFilepath(cleanPath);
         }
         onRejected: { console.log("Rejected") }
     }
@@ -42,7 +46,6 @@ Item {
                 id: browseBtn
                 text: "Browse.."
                 onClicked: {
-                    console.log("clicked")
                     fileDialog.visible = true;
                 }
             }
@@ -52,25 +55,28 @@ Item {
                 Layout.fillWidth: true
                 text: ""
                 readOnly: true;
+                ToolTip.text: text
+                ToolTip.visible: text ? ma.containsMouse : false
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
             }
         }
 
         TreeView {
             clip: true
             Layout.fillWidth: true
-            TableViewColumn {
-                title: "Name"
-                role: "fileName"
-                width: 50
-            }
-            TableViewColumn {
-                title: "Permissions"
-                role: "filePermissions"
-                width: 80
-            }
             Layout.fillHeight: true
         }
 
+        Button {
+            id: publishBtn
+            text: "Publish selected objects"
+            onClicked: {
+                fileDialog.visible = true;
+            }
+        }
     }
-    //        model: fileSystemModel
 }
