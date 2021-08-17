@@ -8,6 +8,8 @@ Window {
     width: 640
     height: 480
     title: qsTr("SMS Backup Editor")
+    minimumWidth:  320;
+    minimumHeight: 320;
 
     SplitView{
         id : splitView
@@ -15,13 +17,13 @@ Window {
 
         SMSLoader{
             SplitView.preferredWidth: 200;
-            SplitView.minimumWidth: 0;
-            SplitView.maximumWidth: 400
+            SplitView.minimumWidth: 100;
+            SplitView.maximumWidth: window.width < 600 ? 200 : 400;
         }
 
         SMSViewer {
             SplitView.preferredWidth: 500;
-            SplitView.minimumWidth: 300;
+            SplitView.minimumWidth: 100;
             SplitView.fillWidth: true;
         }
 
