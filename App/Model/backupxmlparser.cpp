@@ -16,7 +16,7 @@ BackupXMLParser::BackupXMLParser(const QString &filePath)
 
 bool BackupXMLParser::Parse()
 {
-    ParseFile(_filePath);
+    return ParseFile(_filePath);
 }
 
 bool BackupXMLParser::ParseFile(QString filePath)
