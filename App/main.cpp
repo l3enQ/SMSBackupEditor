@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QFontDatabase::addApplicationFont(":/fontello.ttf");
 
-    QQuickStyle::setStyle("Universal");
+    QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
 
