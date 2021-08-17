@@ -1,4 +1,4 @@
-QT += quick
+QT += quick xml widgets gui
 
 CONFIG += c++11
 
