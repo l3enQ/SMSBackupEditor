@@ -49,3 +49,13 @@ void SMSContactsModel::check(int row) {
     setData(index(rowCount() - 1, 0), data(index(row, 0), SMSContactsModel::textRole),
             SMSContactsModel::textRole);
 }
+
+void SMSContactsModel::onDataReady(smsMap data)
+{
+    clear();
+    setColumnCount(1);
+    setRowCount(data.uniqueKeys().count());
+    for (int var = 0; var < rowCount(); ++var) {
+        setData(index(var, 0), data.uniqueKeys().at(var), SMSContactsModel::textRole);
+    }
+}

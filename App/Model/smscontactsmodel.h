@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStandardItemModel>
 #include <QDebug>
+#include "backupxmlparser.h"
 
 class SMSContactsModel : public QStandardItemModel
 {
@@ -27,6 +28,9 @@ public slots:
     Q_INVOKABLE void remove(int row);
     Q_INVOKABLE void select(int row);
     Q_INVOKABLE void check(int row);
+
+
+    void onDataReady(smsMap data);
 
 signals:
 

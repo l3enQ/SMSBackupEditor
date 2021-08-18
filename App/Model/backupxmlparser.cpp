@@ -3,15 +3,19 @@
 #include <QtDebug>
 #include <QFile>
 #include <QDateTime>
-#include <QThread>
 
 BackupXMLParser::BackupXMLParser(const QString &filePath)
 {
     _filePath = filePath;
 
-    static QThread thread;
-    thread.start();
-    moveToThread(&thread);
+    _thread.start();
+    moveToThread(&_thread);
+}
+
+BackupXMLParser::~BackupXMLParser()
+{
+    _thread.quit();
+    _thread.wait();
 }
 
 bool BackupXMLParser::Parse()
@@ -62,8 +66,8 @@ bool BackupXMLParser::ParseFile(QString filePath)
         "body"
     };
 
-    QList<QMap<QString, QString>> smses;
-    QMultiMap<QString, QMap<QString, QString>> smsesMap;
+//    QList<QMap<QString, QString>> smses;
+    smsMap smsesMap;
     for (int var = 0; var < root.childNodes().size(); ++var) {
         QMap<QString, QString> attribVals;
         QDomElement nodeElement = root.childNodes().at(var).toElement();
@@ -71,16 +75,13 @@ bool BackupXMLParser::ParseFile(QString filePath)
             attribVals.insert(attrib, nodeElement.attribute(attrib));
         }
 
-        smses.append(attribVals);
+//        smses.append(attribVals);
         smsesMap.insertMulti(attribVals.value("address"), attribVals);
     }
 
+    emit dataReady(smsesMap);
 
-    qDebug() << smses.size() << smsesMap.size() << smsesMap.uniqueKeys().size()
-             << smsesMap.values(smsesMap.uniqueKeys().at(110)).count();
-    qDebug() << smsesMap.uniqueKeys().at(110) << smsesMap.values(smsesMap.uniqueKeys().at(110));
-
-    write(smses);
+    //    write(smses);
     return true;
 }
 
