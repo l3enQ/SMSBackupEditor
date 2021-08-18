@@ -2,17 +2,6 @@
 
 SMSContactsModel::SMSContactsModel(QObject *parent) : QStandardItemModel(parent)
 {
-    // testData
-    {
-        setColumnCount(1);
-        setRowCount(5);
-        setData(index(0, 0), "1", SMSContactsModel::textRole);
-        setData(index(1, 0), "asdssd2", SMSContactsModel::textRole);
-        setData(index(2, 0), "4dsd", SMSContactsModel::textRole);
-        setData(index(3, 0), "5", SMSContactsModel::textRole);
-        setData(index(4, 0), "5ssssssssssssss", SMSContactsModel::textRole);
-    }
-
 }
 
 QVariant SMSContactsModel::data(const QModelIndex &index, int role) const
@@ -31,23 +20,33 @@ QVariant SMSContactsModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> SMSContactsModel::roleNames() const
 {
     QHash<int, QByteArray> result = QStandardItemModel::roleNames();
-    result.insert(textRole, QByteArrayLiteral("textRole"));
+    result.insert(senderRole, QByteArrayLiteral("senderRole"));
     result.insert(selectRole, QByteArrayLiteral("selectRole"));
+    result.insert(dataRole,   QByteArrayLiteral("dataRole"));
     return result;
 }
 
-void SMSContactsModel::remove(int row) {
+void SMSContactsModel::remove(int row)
+{
     removeRow(row);
+    if (row < selectedRow)
+        selectedRow--;
+    else if (row == selectedRow)
+        select(selectedRow);
 }
 
-void SMSContactsModel::select(int row) {
+void SMSContactsModel::select(int row)
+{
     selectedRow = row;
-    emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
+    emit selectionChanged(selectedRow);
 }
 
-void SMSContactsModel::check(int row) {
-    setData(index(rowCount() - 1, 0), data(index(row, 0), SMSContactsModel::textRole),
-            SMSContactsModel::textRole);
+void SMSContactsModel::selectSMS(int row, int selected)
+{
+    qDebug() << selectedRow << selected;
+    auto list = data(index(selectedRow, 0), dataRole).value<QList<QMap<QString, QString>>>();
+    list[row].insert("select", QString::number(selected));
+    setData(index(selectedRow, 0), QVariant::fromValue(list), dataRole);
 }
 
 void SMSContactsModel::onDataReady(smsMap data)
@@ -56,6 +55,9 @@ void SMSContactsModel::onDataReady(smsMap data)
     setColumnCount(1);
     setRowCount(data.uniqueKeys().count());
     for (int var = 0; var < rowCount(); ++var) {
-        setData(index(var, 0), data.uniqueKeys().at(var), SMSContactsModel::textRole);
+        setData(index(var, 0), data.uniqueKeys().at(var),
+                senderRole);
+        setData(index(var, 0), QVariant::fromValue(data.values(data.uniqueKeys().at(var))),
+                dataRole);
     }
 }

@@ -13,8 +13,9 @@ public:
     explicit SMSContactsModel(QObject *parent = nullptr);
 
     enum Roles  {
-        selectRole = Qt::UserRole + 4,
-        textRole = Qt::UserRole + 5
+        dataRole   = Qt::UserRole + 4,
+        senderRole = Qt::UserRole + 5,
+        selectRole = Qt::UserRole + 6
     };
     Q_ENUM(Roles)
 
@@ -22,18 +23,17 @@ public:
     QHash<int,QByteArray> roleNames() const override;
 
 private:
-    int selectedRow = 2;
+    int selectedRow = -1;
 
 public slots:
     Q_INVOKABLE void remove(int row);
     Q_INVOKABLE void select(int row);
-    Q_INVOKABLE void check(int row);
-
 
     void onDataReady(smsMap data);
+    void selectSMS(int row, int selected);
 
 signals:
-
+    void selectionChanged(int row);
 };
 
 #endif // SMSCONTACTSMODEL_H

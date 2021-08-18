@@ -14,6 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Model/selectablesmsviewer.cpp \
     Model/smscontactsmodel.cpp \
     Model/xmlreader.cpp \
         main.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     Model/backupxmlparser.h \
+    Model/selectablesmsviewer.h \
     Model/smscontactsmodel.h \
     Model/xmlreader.h
 

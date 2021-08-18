@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 
 ListView {
-    model: myModel
+    model: viewerModel
     clip: true
 
     delegate: Item {
@@ -15,7 +15,7 @@ ListView {
             CheckBox {
                 checked: selectRole
                 onCheckedChanged: {
-                    myModel.check(index)
+                    viewerModel.check(index, checked)
                 }
             }
             Label {

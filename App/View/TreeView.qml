@@ -15,11 +15,11 @@ Item {
         delegate: SwipeDelegate {
             id: delegate
 
-            text: textRole
+            text: senderRole
             width: parent.width
 
             swipe.onClosed: {
-                myModel.select(index)
+                contactModel.select(index)
                 undoTimer.stop()
             }
 
@@ -68,14 +68,14 @@ Item {
             Timer {
                 id: undoTimer
                 interval: 1000
-                onTriggered: myModel.remove(index)
+                onTriggered: contactModel.remove(index)
             }
 
             swipe.onCompleted: undoTimer.start()
             //! [removal]
         }
 
-        model: myModel;
+        model: contactModel;
 
         //! [transitions]
         remove: Transition {
@@ -98,7 +98,7 @@ Item {
 
     Label {
         id: placeholder
-        text: qsTr("Swipe no more")
+        text: qsTr("Nothing loaded!")
 
         anchors.margins: 60
         anchors.fill: parent

@@ -74,6 +74,7 @@ bool BackupXMLParser::ParseFile(QString filePath)
         foreach (auto attrib, attributes) {
             attribVals.insert(attrib, nodeElement.attribute(attrib));
         }
+        attribVals.insert("selected", "0");
 
 //        smses.append(attribVals);
         smsesMap.insertMulti(attribVals.value("address"), attribVals);
