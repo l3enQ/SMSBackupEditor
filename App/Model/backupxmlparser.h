@@ -15,7 +15,7 @@ class BackupXMLParser : public QObject
     Q_OBJECT
 
 public:
-    BackupXMLParser(const QString &filePath);
+    BackupXMLParser(const QString &filePath, QObject *parent = nullptr);
     ~BackupXMLParser();
     bool Parse();
 

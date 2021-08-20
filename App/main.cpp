@@ -19,15 +19,13 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
-
-    BackupXMLParser  *xmlM           = new BackupXMLParser("");
-
     SMSContactsModel *model          = new SMSContactsModel(&engine);
     engine.rootContext()->setContextProperty("contactModel",
                                              QVariant::fromValue(model));
     SelectableSMSViewer *viewerModel = new SelectableSMSViewer(&engine);
     engine.rootContext()->setContextProperty("viewerModel",
                                              QVariant::fromValue(viewerModel));
+    BackupXMLParser  *xmlM           = new BackupXMLParser("");
 
     model->connect(model, &SMSContactsModel::loadFileRequested,
                    xmlM,  &BackupXMLParser ::ParseFile);

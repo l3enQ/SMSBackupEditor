@@ -4,7 +4,8 @@
 #include <QFile>
 #include <QDateTime>
 
-BackupXMLParser::BackupXMLParser(const QString &filePath)
+BackupXMLParser::BackupXMLParser(const QString &filePath, QObject *parent):
+    QObject(parent)
 {
     _filePath = filePath;
 
@@ -73,7 +74,7 @@ bool BackupXMLParser::ParseFile(QString filePath)
         foreach (auto attrib, attributes) {
             attribVals.insert(attrib, nodeElement.attribute(attrib));
         }
-        attribVals.insert("selected", "0");
+        attribVals.insert("select", "1");
 
         smsesMap.insertMulti(attribVals.value("address"), attribVals);
     }
