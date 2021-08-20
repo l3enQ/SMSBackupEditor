@@ -12,29 +12,34 @@ ApplicationWindow {
     title: qsTr("SMS Backup Editor")
     minimumWidth:  320;
     minimumHeight: 320;
-    Material.theme: Material.Light
-    Material.accent: Material.Pink
+    Material.theme : Material.Light
+    Material.accent: Material.Green
 
-    SplitView{
+    SplitView {
         id : splitView
         anchors.fill: parent
 
-        SMSLoader{
+        SMSLoader {
             SplitView.preferredWidth: 200;
-            SplitView.minimumWidth: 100;
-            SplitView.maximumWidth: window.width < 600 ? 200 : 400;
+            SplitView.minimumWidth  : 100;
+            SplitView.maximumWidth  : window.width < 600
+                                      ? 200
+                                      : 400;
         }
 
         SMSViewer {
             SplitView.preferredWidth: 500;
-            SplitView.minimumWidth: 100;
-            SplitView.fillWidth: true;
+            SplitView.minimumWidth  : 100;
+            SplitView.fillWidth     : true;
         }
 
         handle: Rectangle {
-            implicitWidth:  2
-            color: SplitHandle.pressed ? "#ff0000"
-                : (SplitHandle.hovered ? "#00ff00" : "#009900")
+            implicitWidth: 2
+            radius       : 2
+            color: SplitHandle.pressed ? "#ff009900"
+                                       : (SplitHandle.hovered
+                                          ? "#99009900"
+                                          : "#55009900")
         }
     }
 }

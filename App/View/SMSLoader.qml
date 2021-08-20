@@ -1,11 +1,11 @@
 import QtQuick 2.0
-//import QtQuick 2.3
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 
 Item {
     clip: true
+
     onWidthChanged: {
         width = width > 150 ? width : 0;
     }
@@ -58,43 +58,53 @@ Item {
     //! [filedialog]
 
     ColumnLayout {
-        anchors.fill: parent
+        anchors.fill   : parent
         anchors.margins: 2
-        spacing: 2
+        spacing        : 2
 
+        //! [Loader section]
         RowLayout {
             Button {
-                id: browseBtn
+                id  : browseBtn
                 text: "Browse.."
+
                 onClicked: {
                     fileDialog.visible = true;
                 }
             }
+
             TextField {
                 id: pathField
+
                 Layout.alignment: Qt.AlignBaseline
                 Layout.fillWidth: true
-                text: ""
+
+                text    : ""
                 readOnly: true;
-                ToolTip.text: text
+
+                ToolTip.text   : text
                 ToolTip.visible: text ? ma.containsMouse : false
+
                 MouseArea {
                     id: ma
+
                     anchors.fill: parent
                     hoverEnabled: true
                 }
             }
         }
+        //! [Loader section]
 
         TreeView {
             clip: true
-            Layout.fillWidth: true
+            Layout.fillWidth : true
             Layout.fillHeight: true
         }
 
         Button {
-            id: publishBtn
-            text: "Publish selected objects"
+            id  : publishBtn
+            text: "Publish selected to xml"
+
             onClicked: {
                 saveDialog.visible = true;
             }
