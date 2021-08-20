@@ -17,6 +17,7 @@ Item {
 
             text: senderRole
             width: parent.width
+            font.bold: selectRole
 
             swipe.onClosed: {
                 contactModel.select(index)

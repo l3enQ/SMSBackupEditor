@@ -38,6 +38,7 @@ void SMSContactsModel::remove(int row)
 void SMSContactsModel::select(int row)
 {
     selectedRow = row;
+    emit dataChanged(index(0, 0), index(rowCount() - 1, 0), {selectRole});
     emit selectionChanged(selectedRow);
 }
 
