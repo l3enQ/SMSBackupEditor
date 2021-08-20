@@ -17,6 +17,8 @@ QHash<int, QByteArray> SMSContactsModel::roleNames() const
     QHash<int, QByteArray> result = QStandardItemModel::roleNames();
     result.insert(selectRole, QByteArrayLiteral("selectRole"));
     result.insert(senderRole, QByteArrayLiteral("senderRole"));
+    result.insert(exportRole, QByteArrayLiteral("exportRole"));
+    result.insert(countRole,  QByteArrayLiteral("countRole"));
     result.insert(dataRole,   QByteArrayLiteral("dataRole"));
     return result;
 }
@@ -41,6 +43,12 @@ void SMSContactsModel::remove(int row)
 
 void SMSContactsModel::select(int row)
 {
+    if (rowCount() == 0)
+        return;
+
+    if (rowCount() <= row)
+        row = rowCount() - 1;
+
     selectedRow = row;
 
     emit dataChanged(index(0, 0), index(rowCount() - 1, 0), {selectRole});
@@ -50,9 +58,14 @@ void SMSContactsModel::select(int row)
 void SMSContactsModel::selectSMS(int row, int selected)
 {
     auto list = data(index(selectedRow, 0), dataRole).value<QList<QMap<QString, QString>>>();
-    list[row].insert("select", QString::number(selected));
+    if (list[row].value ("select").toInt()      != selected){
+        list[row].insert("select", QString::number(selected));
 
-    setData(index(selectedRow, 0), QVariant::fromValue(list), dataRole);
+        auto exported = data(index(selectedRow, 0), exportRole).toInt();
+
+        setData(index(selectedRow, 0), exported + (selected == 1 ? 1 : -1), exportRole);
+        setData(index(selectedRow, 0), QVariant::fromValue(list)          , dataRole);
+    }
 }
 
 void SMSContactsModel::onExportReq(QString path)
@@ -85,7 +98,19 @@ void SMSContactsModel::onDataReady(smsMap data)
     for (int var = 0; var < rowCount(); ++var) {
         setData(index(var, 0), data.uniqueKeys().at(var),
                 senderRole);
-        setData(index(var, 0), QVariant::fromValue(data.values(data.uniqueKeys().at(var))),
+        auto values = data.values(data.uniqueKeys().at(var));
+        int exported = 0;
+        foreach (auto value, values) {
+            if (value.value("select").toInt() == 1)
+                exported++;
+        }
+        setData(index(var, 0), exported,
+                exportRole);
+        setData(index(var, 0), values.size(),
+                countRole);
+        setData(index(var, 0), QVariant::fromValue(values),
                 dataRole);
     }
+
+    select(0);
 }

@@ -20,8 +20,9 @@ Item {
 
             width: parent.width
 
-            text      : senderRole
+            text      : "(" + exportRole + "/" + countRole + ") " +senderRole
             font.bold : selectRole
+            font.pixelSize: 12
             background: Rectangle {
                 color : Material.color( (index % 2 === 0)
                                        ? Material.LightGreen :

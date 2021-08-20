@@ -18,7 +18,8 @@ QHash<int, QByteArray> SelectableSMSViewer::roleNames() const
 
 void SelectableSMSViewer::check(int row, bool checked)
 {
-    setData(index(row, 0), checked ? 1 : 0, selectRole);
+    if ((data(index(row, 0), selectRole).toInt() == 1) != checked)
+        setData(index(row, 0), checked ? 1 : 0, selectRole);
 }
 
 void SelectableSMSViewer::onDataReady(QList<QMap<QString, QString>> data)

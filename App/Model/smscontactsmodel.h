@@ -13,7 +13,9 @@ public:
     enum Roles  {
         selectRole = Qt::UserRole + 1,
         senderRole = Qt::UserRole + 2,
-        dataRole   = Qt::UserRole + 3
+        exportRole = Qt::UserRole + 3,
+        countRole  = Qt::UserRole + 4,
+        dataRole   = Qt::UserRole + 5
     };
     Q_ENUM(Roles)
 
