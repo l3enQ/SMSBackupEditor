@@ -26,6 +26,13 @@ QHash<int, QByteArray> SMSContactsModel::roleNames() const
     return result;
 }
 
+void SMSContactsModel::loadFile(QString path)
+{
+    clear();
+    setColumnCount(1);
+    emit loadFileRequested(path);
+}
+
 void SMSContactsModel::remove(int row)
 {
     removeRow(row);
@@ -39,7 +46,7 @@ void SMSContactsModel::select(int row)
 {
     selectedRow = row;
     emit dataChanged(index(0, 0), index(rowCount() - 1, 0), {selectRole});
-    emit selectionChanged(selectedRow);
+    emit contactSelected(selectedRow);
 }
 
 void SMSContactsModel::selectSMS(int row, int selected)
@@ -72,8 +79,6 @@ void SMSContactsModel::onExportReq(QString path)
 
 void SMSContactsModel::onDataReady(smsMap data)
 {
-    clear();
-    setColumnCount(1);
     setRowCount(data.uniqueKeys().count());
     for (int var = 0; var < rowCount(); ++var) {
         setData(index(var, 0), data.uniqueKeys().at(var),

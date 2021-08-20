@@ -26,6 +26,7 @@ private:
     int selectedRow = -1;
 
 public slots:
+    Q_INVOKABLE void loadFile(QString path);
     Q_INVOKABLE void remove(int row);
     Q_INVOKABLE void select(int row);
     Q_INVOKABLE void onExportReq(QString path);
@@ -34,7 +35,8 @@ public slots:
     void selectSMS(int row, int selected);
 
 signals:
-    void selectionChanged(int row);
+    void loadFileRequested(QString path);
+    void contactSelected(int row);
     void exportReady(smsMap data, QString path);
 };
 

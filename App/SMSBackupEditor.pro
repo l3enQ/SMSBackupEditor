@@ -16,15 +16,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Model/selectablesmsviewer.cpp \
     Model/smscontactsmodel.cpp \
-    Model/xmlreader.cpp \
         main.cpp \
     Model/backupxmlparser.cpp
 
 HEADERS += \
     Model/backupxmlparser.h \
     Model/selectablesmsviewer.h \
-    Model/smscontactsmodel.h \
-    Model/xmlreader.h
+    Model/smscontactsmodel.h
 
 RESOURCES += qml.qrc \
     fontello.ttf

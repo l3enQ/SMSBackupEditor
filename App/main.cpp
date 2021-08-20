@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QQuickStyle>
 #include "Model/backupxmlparser.h"
-#include "Model/xmlreader.h"
 #include "Model/smscontactsmodel.h"
 #include "Model/selectablesmsviewer.h"
 
@@ -21,27 +20,30 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    BackupXMLParser *a = new BackupXMLParser("");
-    XMLReader *fsm = new XMLReader(&engine);
-    engine.rootContext()->setContextProperty("xmlReader", fsm);
-    SMSContactsModel *model = new SMSContactsModel(&engine);
-    engine.rootContext()->setContextProperty("contactModel", QVariant::fromValue(model));
+    BackupXMLParser  *xmlM           = new BackupXMLParser("");
+
+    SMSContactsModel *model          = new SMSContactsModel(&engine);
+    engine.rootContext()->setContextProperty("contactModel",
+                                             QVariant::fromValue(model));
     SelectableSMSViewer *viewerModel = new SelectableSMSViewer(&engine);
-    engine.rootContext()->setContextProperty("viewerModel", QVariant::fromValue(viewerModel));
+    engine.rootContext()->setContextProperty("viewerModel",
+                                             QVariant::fromValue(viewerModel));
 
-    fsm->connect(fsm, &XMLReader::filepathChanged, model, &SMSContactsModel::clear);
-    fsm->connect(fsm, &XMLReader::filepathChanged, a, &BackupXMLParser::ParseFile);
-    fsm->connect(fsm, &XMLReader::exportToFileRequested, model, &SMSContactsModel::onExportReq);
+    model->connect(model, &SMSContactsModel::loadFileRequested,
+                   xmlM,  &BackupXMLParser ::ParseFile);
+    model->connect(xmlM,  &BackupXMLParser ::dataReady,
+                   model, &SMSContactsModel::onDataReady);
+    model->connect(model, &SMSContactsModel::exportReady,
+                   xmlM,  &BackupXMLParser ::ExportToFile);
 
-    model->connect(a,     &BackupXMLParser::dataReady, model, &SMSContactsModel::onDataReady);
-    model->connect(model, &SMSContactsModel::exportReady,  a, &BackupXMLParser::ExportToFile);
-    model->connect(model, &SMSContactsModel::selectionChanged, [=](int row){
+    model->connect(model, &SMSContactsModel::contactSelected, [=](int row){
         QList<QMap<QString, QString>> data = model->data(model->index(row, 0),
                                                          SMSContactsModel::dataRole)
                 .value<QList<QMap<QString, QString>>>();
         viewerModel->onDataReady(data);
     });
-    model->connect(viewerModel, &SelectableSMSViewer::dataChanged,
+
+    viewerModel->connect(viewerModel, &SelectableSMSViewer::dataChanged,
                    [=](const QModelIndex &topLeft, const QModelIndex &bottomRight,
                    const QVector<int> &roles = QVector<int>()){
         if (roles.contains(SelectableSMSViewer::selectRole)) {

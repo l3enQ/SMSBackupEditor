@@ -29,7 +29,7 @@ Item {
             console.log("Accepted: " + cleanPath)
 
             pathField.text = cleanPath;
-            xmlReader.setFilepath(cleanPath);
+            contactModel.loadFile(cleanPath);
         }
         onRejected: { console.log("Rejected") }
     }
@@ -51,8 +51,7 @@ Item {
             var cleanPath = decodeURIComponent(path);
             console.log("Accepted: " + cleanPath)
 
-            xmlReader.exportToFile(cleanPath);
-//            contactModel.onExportReq(cleanPath);
+            contactModel.onExportReq(cleanPath);
         }
         onRejected: { console.log("Rejected") }
     }
