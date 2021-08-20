@@ -66,7 +66,6 @@ bool BackupXMLParser::ParseFile(QString filePath)
         "body"
     };
 
-//    QList<QMap<QString, QString>> smses;
     smsMap smsesMap;
     for (int var = 0; var < root.childNodes().size(); ++var) {
         QMap<QString, QString> attribVals;
@@ -76,17 +75,20 @@ bool BackupXMLParser::ParseFile(QString filePath)
         }
         attribVals.insert("selected", "0");
 
-//        smses.append(attribVals);
         smsesMap.insertMulti(attribVals.value("address"), attribVals);
     }
 
     emit dataReady(smsesMap);
 
-    //    write(smses);
     return true;
 }
 
-void BackupXMLParser::write(QList<QMap<QString, QString> > smses)
+void BackupXMLParser::ExportToFile(smsMap smsesData, QString filePath)
+{
+    write(smsesData.values(), filePath);
+}
+
+void BackupXMLParser::write(QList<QMap<QString, QString>> smses, QString filePath)
 {
     QDomDocument doc = QDomDocument("smses2");
     QDomElement rootElement = doc.createElement("smses");
@@ -101,7 +103,7 @@ void BackupXMLParser::write(QList<QMap<QString, QString> > smses)
 
     doc.appendChild(rootElement);
 
-    QFile file("D:/xmlPath.xml");
+    QFile file(filePath);
     if (!file.open(QFile::WriteOnly)) {
         qDebug()<< "Can not open Xml file. Check yor file.";
         return ;

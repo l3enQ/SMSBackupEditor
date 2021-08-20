@@ -1,6 +1,5 @@
 import QtQuick 2.0
 //import QtQuick 2.3
-
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
@@ -31,6 +30,29 @@ Item {
 
             pathField.text = cleanPath;
             xmlReader.setFilepath(cleanPath);
+        }
+        onRejected: { console.log("Rejected") }
+    }
+
+    FileDialog {
+        id: saveDialog
+        modality: Qt.WindowModal;
+        title: "Export to ...";
+        selectExisting: false;
+        selectMultiple: false;
+        selectFolder: false;
+        nameFilters: [ "XML files (*.xml)" ]
+        selectedNameFilter: "XML files (*.xml)"
+        sidebarVisible: true
+        onAccepted: {
+            var path = saveDialog.fileUrl.toString();
+            path = path.replace(/^(file:\/{3})/,"");
+            // unescape html codes like '%23' for '#'
+            var cleanPath = decodeURIComponent(path);
+            console.log("Accepted: " + cleanPath)
+
+            xmlReader.exportToFile(cleanPath);
+//            contactModel.onExportReq(cleanPath);
         }
         onRejected: { console.log("Rejected") }
     }
@@ -75,7 +97,7 @@ Item {
             id: publishBtn
             text: "Publish selected objects"
             onClicked: {
-                fileDialog.visible = true;
+                saveDialog.visible = true;
             }
         }
     }

@@ -15,3 +15,8 @@ void XMLReader::setFilepath(QString path)
     emit filepathChanged(path);
 }
 
+void XMLReader::exportToFile(QString path)
+{
+    emit exportToFileRequested(path);
+}
+

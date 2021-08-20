@@ -14,9 +14,11 @@ public:
 
     Q_INVOKABLE QString filePath();
     Q_INVOKABLE void setFilepath(QString path);
+    Q_INVOKABLE void exportToFile(QString path);
 
 signals:
     void filepathChanged(QString);
+    void exportToFileRequested(QString);
 
 private:
     QString _filePath;

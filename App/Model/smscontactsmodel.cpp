@@ -48,6 +48,27 @@ void SMSContactsModel::selectSMS(int row, int selected)
     setData(index(selectedRow, 0), QVariant::fromValue(list), dataRole);
 }
 
+void SMSContactsModel::onExportReq(QString path)
+{
+    smsMap exportData;
+    for (int var = 0; var < rowCount(); ++var) {
+        QString sender = data(index(var, 0), senderRole).toString();
+
+        QList<QMap<QString, QString>> senderData = data(index(var, 0), dataRole)
+                .value<QList<QMap<QString, QString>>>();
+        for (int sms = 0; sms < senderData.count(); ++sms) {
+            QMap<QString, QString> smsData = senderData.at(sms);
+            int selected = smsData.value("select").toInt();
+            if (selected == 1) {
+                smsData.remove("select");
+                exportData.insertMulti(sender, smsData);
+            }
+        }
+    }
+
+    emit exportReady(exportData, path);
+}
+
 void SMSContactsModel::onDataReady(smsMap data)
 {
     clear();

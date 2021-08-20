@@ -31,8 +31,10 @@ int main(int argc, char *argv[])
 
     fsm->connect(fsm, &XMLReader::filepathChanged, model, &SMSContactsModel::clear);
     fsm->connect(fsm, &XMLReader::filepathChanged, a, &BackupXMLParser::ParseFile);
+    fsm->connect(fsm, &XMLReader::exportToFileRequested, model, &SMSContactsModel::onExportReq);
 
-    model->connect(a, &BackupXMLParser::dataReady, model, &SMSContactsModel::onDataReady);
+    model->connect(a,     &BackupXMLParser::dataReady, model, &SMSContactsModel::onDataReady);
+    model->connect(model, &SMSContactsModel::exportReady,  a, &BackupXMLParser::ExportToFile);
     model->connect(model, &SMSContactsModel::selectionChanged, [=](int row){
         QList<QMap<QString, QString>> data = model->data(model->index(row, 0),
                                                          SMSContactsModel::dataRole)

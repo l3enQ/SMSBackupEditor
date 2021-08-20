@@ -28,12 +28,14 @@ private:
 public slots:
     Q_INVOKABLE void remove(int row);
     Q_INVOKABLE void select(int row);
+    Q_INVOKABLE void onExportReq(QString path);
 
     void onDataReady(smsMap data);
     void selectSMS(int row, int selected);
 
 signals:
     void selectionChanged(int row);
+    void exportReady(smsMap data, QString path);
 };
 
 #endif // SMSCONTACTSMODEL_H

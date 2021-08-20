@@ -21,6 +21,7 @@ public:
 
 public slots:
     bool ParseFile(QString filePath);
+    void ExportToFile(smsMap smsesData, QString filePath);
 
 signals:
     dataReady(smsMap smses);
@@ -30,7 +31,7 @@ private:
     QDomDocument domDocument;
     QThread _thread;
 
-    void write(QList<QMap<QString, QString>> smses);
+    void write(QList<QMap<QString, QString>> smses, QString filePath);
 
 };
 Q_DECLARE_METATYPE(smsMap);
