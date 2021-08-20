@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
         if (roles.contains(SelectableSMSViewer::selectRole)) {
             if (topLeft.isValid() && bottomRight.isValid() && topLeft.row() == bottomRight.row()) {
                 int select = topLeft.data(SelectableSMSViewer::selectRole).toInt();
-                qDebug() << topLeft << select;
                 model->selectSMS(topLeft.row(), select);
             }
         }

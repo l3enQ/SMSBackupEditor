@@ -17,7 +17,8 @@ public:
         textRole   = Qt::UserRole + 5,
         dateRole   = Qt::UserRole + 6,
         dataRole   = Qt::UserRole + 1,
-        servRole   = Qt::UserRole + 2
+        servRole   = Qt::UserRole + 2,
+        typeRole   = Qt::UserRole + 3
     };
     Q_ENUM(Roles)
     QHash<int,QByteArray> roleNames() const override;

@@ -43,7 +43,6 @@ void SMSContactsModel::select(int row)
 
 void SMSContactsModel::selectSMS(int row, int selected)
 {
-    qDebug() << selectedRow << selected;
     auto list = data(index(selectedRow, 0), dataRole).value<QList<QMap<QString, QString>>>();
     list[row].insert("select", QString::number(selected));
     setData(index(selectedRow, 0), QVariant::fromValue(list), dataRole);
