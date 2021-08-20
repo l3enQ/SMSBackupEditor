@@ -2,13 +2,10 @@
 #include <QDomDocument>
 #include <QtDebug>
 #include <QFile>
-#include <QDateTime>
 
-BackupXMLParser::BackupXMLParser(const QString &filePath, QObject *parent):
+BackupXMLParser::BackupXMLParser(QObject *parent):
     QObject(parent)
 {
-    _filePath = filePath;
-
     _thread.start();
     moveToThread(&_thread);
 }
@@ -19,23 +16,19 @@ BackupXMLParser::~BackupXMLParser()
     _thread.wait();
 }
 
-bool BackupXMLParser::Parse()
-{
-    return ParseFile(_filePath);
-}
-
 bool BackupXMLParser::ParseFile(QString filePath)
 {
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
-
-    //load the file
     QFile xmlFile(filePath);
     if (!xmlFile.exists() || !xmlFile.open(QFile::ReadOnly)) {
         qDebug() << "Check your *.xml file";
         return false;
     }
+
+    QDomDocument domDocument;
+
+    int errorLine;
+    int errorColumn;
+    QString errorStr;
 
     if (!domDocument.setContent(&xmlFile, true, &errorStr, &errorLine,
                                 &errorColumn)) {
@@ -47,25 +40,6 @@ bool BackupXMLParser::ParseFile(QString filePath)
     }
 
     QDomElement root = domDocument.documentElement();
-
-    QStringList attributes = {
-        "protocol",
-        "address",
-        "date",
-        "type",
-        "subject",
-        "toa",
-        "sc_toa",
-        "service_center",
-        "read",
-        "status",
-        "locked",
-        "date_sent",
-        "sub_id",
-        "readable_date",
-        "contact_name",
-        "body"
-    };
 
     smsMap smsesMap;
     for (int var = 0; var < root.childNodes().size(); ++var) {
@@ -91,7 +65,7 @@ void BackupXMLParser::ExportToFile(smsMap smsesData, QString filePath)
 
 void BackupXMLParser::write(QList<QMap<QString, QString>> smses, QString filePath)
 {
-    QDomDocument doc = QDomDocument("smses2");
+    QDomDocument doc;
     QDomElement rootElement = doc.createElement("smses");
 
     foreach (auto sms, smses) {

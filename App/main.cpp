@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     SelectableSMSViewer *viewerModel = new SelectableSMSViewer(&engine);
     engine.rootContext()->setContextProperty("viewerModel",
                                              QVariant::fromValue(viewerModel));
-    BackupXMLParser  *xmlM           = new BackupXMLParser("");
+    BackupXMLParser  *xmlM           = new BackupXMLParser();
 
     model->connect(model, &SMSContactsModel::loadFileRequested,
                    xmlM,  &BackupXMLParser ::ParseFile);

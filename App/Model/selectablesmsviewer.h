@@ -1,10 +1,7 @@
 #ifndef SELECTABLESMSVIEWER_H
 #define SELECTABLESMSVIEWER_H
 
-#include <QObject>
 #include <QStandardItemModel>
-#include <QDebug>
-#include "backupxmlparser.h"
 
 class SelectableSMSViewer : public QStandardItemModel
 {
@@ -13,12 +10,12 @@ public:
     explicit SelectableSMSViewer(QObject *parent = nullptr);
 
     enum Roles  {
-        selectRole = Qt::UserRole + 4,
-        textRole   = Qt::UserRole + 5,
-        dateRole   = Qt::UserRole + 6,
-        dataRole   = Qt::UserRole + 1,
-        servRole   = Qt::UserRole + 2,
-        typeRole   = Qt::UserRole + 3
+        selectRole = Qt::UserRole + 1,
+        dateRole   = Qt::UserRole + 2,
+        servRole   = Qt::UserRole + 3,
+        textRole   = Qt::UserRole + 4,
+        typeRole   = Qt::UserRole + 5,
+        dataRole   = Qt::UserRole + 6
     };
     Q_ENUM(Roles)
     QHash<int,QByteArray> roleNames() const override;
