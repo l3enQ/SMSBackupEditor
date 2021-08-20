@@ -1,68 +1,90 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Material 2.12
 
 ListView {
-    id: listView
-    model: viewerModel
+    id  : listView
     clip: true
+
+    model: viewerModel
 
     delegate: Item {
         id: item1
+
+        width : parent.width;
         height: text1.height + 14;
-        width: parent.width;
+
         Item {
             id: name
-            height: text1.height + 12
-            anchors.fill: parent
+
+            anchors.fill     : parent
             Layout.fillHeight: true
+
+            height: text1.height + 12
+
             RowLayout {
-                anchors.fill: parent
-                Layout.fillWidth: true;
-                spacing: 2;
-                anchors.margins: 2
+                anchors.fill     : parent
+                Layout.fillWidth : true;
                 Layout.fillHeight: true
+                anchors.margins  : 2
+                spacing          : 2;
+
                 CheckBox {
                     id: checkBox1
-                    checked: selectRole
+
                     Layout.alignment: Qt.AlignTop
+
+                    checked: selectRole
+
                     onCheckedChanged: {
                         viewerModel.check(index, checked)
                     }
                 }
+
                 Rectangle {
+                    Layout.fillWidth: (typeRole === "1")
+
                     color : "#00fdfdfd"
                     height: 2
                     width : 10
-                    Layout.fillWidth: (typeRole === "1")
                 }
+
                 Rectangle {
-                    color: (typeRole === "2") ? "#44880000" : "#44000088"
-                    border.color: "#191919"
-                    border.width: 1
-                    radius: 10
+                    Layout.fillWidth : true
+                    Layout.fillHeight: true
+
+                    clip  : true
                     height: text1.height + 10;
                     width : 15
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    clip: true
+
+                    border.color: Material.color(Material.Grey, Material.Shade100)
+                    border.width: 1
+                    radius      : 10
+                    color       : Material.color( (typeRole === "2")
+                                                 ? Material.LightGreen
+                                                 : Material.LightBlue,
+                                                   Material.Shade100)
                     Text {
-                        id:text1
-                        anchors.fill: parent
+                        id: text1
+
+                        anchors.fill   : parent
                         anchors.margins: 5
-                        text: qsTr(textRole)
-                        font.family: "fontello"
-                        clip: true
-                        height: contentHeight + 10;
-                        wrapMode: Text.WordWrap
-                        font.pixelSize: /*checkBox1.pressed ? 14:*/10
+                        clip           : true
+                        height         : contentHeight + 10;
+                        text           : qsTr(textRole)
+                        font.family    : "fontello"
+                        wrapMode       : Text.WordWrap
+                        font.pixelSize : 10
                     }
                 }
+
                 Rectangle {
+                    Layout.fillWidth: (typeRole === "2")
+
                     color : "#00fdfdfd"
                     height: 2
                     width : 10
-                    Layout.fillWidth: (typeRole === "2")
                 }
             }
         }

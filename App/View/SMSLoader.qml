@@ -95,8 +95,9 @@ Item {
         }
         //! [Loader section]
 
-        TreeView {
+        ContactsView {
             clip: true
+
             Layout.fillWidth : true
             Layout.fillHeight: true
         }
@@ -104,7 +105,6 @@ Item {
         Button {
             id  : publishBtn
             text: "Publish selected to xml"
-
             onClicked: {
                 saveDialog.visible = true;
             }
